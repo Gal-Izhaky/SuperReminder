@@ -54,7 +54,7 @@ This project is my final project in Software Engineering class (in Highschool). 
 ## 💻 How to Run
 1. **Clone the Repository:**
     ```console
-    git clone <repository-link>  
+    git clone https://github.com/Gal-Izhaky/SuperReminder.git
     cd superreminder  
     ```
 2. **Install Dependencies:**
