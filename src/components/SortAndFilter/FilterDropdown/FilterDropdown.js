@@ -1,20 +1,32 @@
 // react imports
 import { Text, TouchableOpacity, View, Image } from 'react-native';
+import { useState, useContext } from 'react';
 
-import DateTimePicker from 'react-native-ui-datepicker';
+// core
+import { ShoppingListContext } from '../../../core/contexts/ShoppingListContext.js';
 
 // styles
 import styles from "./FilterDropdown.styles"
-import { useState } from 'react';
 
-const refreshImage = require("../../../assets/images/refresh.png")
+// menus
+import DateMenu from './FilterMenus/DateMenu.js';
+import NameMenu from './FilterMenus/NameMenu.js';
+import SizeMenu from './FilterMenus/SizeMenu.js';
 
 const FilterDropdown = ({ options, sortKey, isAscending, setValues }) => {    
     const [openMenu, setOpenMenu] = useState(null);
 
-    const [startDate, setStartDate] = useState(undefined)
-    const [endDate, setEndDate] = useState(undefined)
+    const [startDate, setStartDate] = useState(undefined);
+    const [endDate, setEndDate] = useState(undefined);
 
+    const [name, setName] = useState("");
+
+    const { lists } = useContext(ShoppingListContext);
+    
+    const maxItemsVal = Math.max(...lists.map(list => list.items.length)) + 0
+    const [minMaxVals, setMinMaxVals] = useState([0, maxItemsVal]);
+
+    
     const getArrow = (menu) => {
         return menu === openMenu ?
          require("../../../assets/images/upArrow.png") : 
@@ -54,26 +66,12 @@ const FilterDropdown = ({ options, sortKey, isAscending, setValues }) => {
 
                     </TouchableOpacity>
                     {option.value === openMenu &&
-                        <>
-                        <DateTimePicker
-                            mode="range"
-                            startDate={startDate}
-                            endDate={endDate}
-                            locale="he-IL"
-                            onChange={setDates}
-                        />
-                        <TouchableOpacity
-                            activeOpacity={1}
-                            style={styles.refreshDate}
-                            onPress={() => {setDates({})}}>
-                                
-                            <Image 
-                                style={styles.arrow}
-                                source={refreshImage} 
-                            />
-                        </TouchableOpacity>
-                        </>
-                        
+                        (
+                            option.value === "updateTime" ? DateMenu(startDate, endDate, setDates) :
+                            option.value === "name" ? NameMenu(name, setName) : 
+                            option.value === "amount" ? SizeMenu(minMaxVals, maxItemsVal, setMinMaxVals) :
+                            ""
+                        )
                     }
                 </TouchableOpacity>
             })}

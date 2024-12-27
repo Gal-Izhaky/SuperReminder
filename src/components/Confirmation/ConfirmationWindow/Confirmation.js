@@ -81,18 +81,18 @@ const Confirmation = ({ visible, onConfirm, onCancel, title, type }) => {
                     style={[styles.content, { transform: [{ translateY: slideAnim}], opacity: opacityAnim }]}>
                     <Text style={styles.title}>{title}</Text>
                     {type === "add" &&
-                    <View style={styles.inputContainer}>
-                        <TextInput  
-                            style={styles.input} 
-                            placeholder="שם הרשימה"
-                            maxLength={15}
-                            onChangeText={(val) => {setName(val)}} 
-                            keyboardType="visible-password"
-                            underlineColorAndroid="transparent"/>
+                        <View style={styles.inputContainer}>
+                            <TextInput  
+                                style={styles.input} 
+                                placeholder="שם הרשימה"
+                                maxLength={15}
+                                onChangeText={(val) => {setName(val)}} 
+                                keyboardType="visible-password"
+                                underlineColorAndroid="transparent"/>
 
-                        <Text style={styles.charIndicator}>{name.length}/15</Text>
-                    </View> 
-}
+                            <Text style={styles.charIndicator}>{name.length}/15</Text>
+                        </View> 
+                    }
                     <ConfirmButtons 
                         onConfirm={confirm} 
                         onCancel={onCancel} 

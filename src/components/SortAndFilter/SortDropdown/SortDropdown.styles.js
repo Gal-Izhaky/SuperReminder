@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         paddingVertical: 6,
         marginLeft: "4%",
-
         ...globalstyles.shadow,
     },
     option: {

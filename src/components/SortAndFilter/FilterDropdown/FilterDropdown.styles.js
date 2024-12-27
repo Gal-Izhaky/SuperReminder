@@ -4,7 +4,7 @@ import globalstyles from '../../../theme/globalstyles';
 
 const styles = StyleSheet.create({
     dropdown: {
-        width: "70%",
+        width: "67%",
         marginVertical: 6,
         backgroundColor: colors.background,
         borderRadius: 8,
@@ -29,11 +29,6 @@ const styles = StyleSheet.create({
         width:15,
         height:15,
     },
-    refreshDate: {
-        position: "absolute",
-        bottom: 45,
-        right: 20,
-    }
 }); 
 
 

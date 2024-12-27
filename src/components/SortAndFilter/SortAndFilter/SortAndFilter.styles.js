@@ -4,6 +4,8 @@ import globalstyles from '../../../theme/globalstyles';
 
 const styles = StyleSheet.create({
     container: {
+        zIndex: 2,
+        position: "absolute",
         width: "90%",
         marginBottom: 3,
     },
@@ -21,6 +23,9 @@ const styles = StyleSheet.create({
     },
     button: { 
         flexGrow: 1,
+    },
+    absPos: {
+        position: "absolute",
     }
 }); 
 

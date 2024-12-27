@@ -7,10 +7,10 @@ import { useContext, useState } from "react";
 import Confirmation from "../Confirmation/ConfirmationWindow/Confirmation.js";
 
 const ShopList = ( { sortLists, filterLists }) => {
-    const { removeList } = useContext(ShoppingListContext)
+    const { lists, removeList } = useContext(ShoppingListContext)
+
     const [visible, setVisible] = useState(false);
     const [currList, setCurrList] = useState(null);
-    const { lists } = useContext(ShoppingListContext);
 
     const confirmDelete = (item) => {
         setVisible(true)
