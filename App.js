@@ -1,21 +1,13 @@
 // react imports
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useState, useEffect } from "react";
-import { StatusBar } from 'expo-status-bar';
-import { ActivityIndicator } from 'react-native';
-
-// core imports
-import { ShoppingListProvider } from "./src/core/contexts/ShoppingListContext";
 
 // imports
 import { manageData, shouldDownloadData } from "./src/firebase/DataManager";
 
 // components
-import EditList from "./src/screens/EditList/EditList";
-import DrawerNavigator from "./src/Navigation/DrawerNavigator/DrawerNavigator";
+import Spinner from "./src/components/Spinner/Spinner";
+import MainContent from "./src/components/MainContent/MainContent";
 
-const stack = createNativeStackNavigator();
 
 const App = () => {
     const [fetchingData, setFetchingData] = useState(false);
@@ -45,8 +37,6 @@ const App = () => {
                 console.log("Data is up-to-date. No download needed.");
                 return 
             }
-            
-            console.log("FETCHING DATA")
             setFetchingData(true);
         }
 
@@ -65,17 +55,8 @@ const App = () => {
     return <>
         {
             fetchingData 
-            ?   <ActivityIndicator size="large" color="#ff4500" /> 
-            :   <ShoppingListProvider>
-                    <NavigationContainer>
-                        <StatusBar style="auto" />
-                        <stack.Navigator style={{ layoutDirection: 'ltr' }} initialRouteName="Drawer">
-                            <stack.Screen name="Drawer" component={DrawerNavigator} options={{ headerShown: false }} />
-
-                            <stack.Screen options={{headerShown: false}} name="עריכת רשימה" component={EditList} />
-                        </stack.Navigator>
-                    </NavigationContainer>
-                </ShoppingListProvider>
+            ?   <Spinner /> 
+            :   <MainContent />
         }
     </>
 }
