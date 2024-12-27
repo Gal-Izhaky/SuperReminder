@@ -48,7 +48,6 @@ const fetchMetadata = async () => {
 const shouldDownloadData = async () => {
     // check for current version
     const currentVersion = FirebaseData.getCurrentUpdateTime();
-
     if (!currentVersion){
         return true;
     } 
@@ -56,9 +55,6 @@ const shouldDownloadData = async () => {
     const lastUpdatedTime = parseInt(currentVersion, 10);
     const currentTime = Date.now();
     const oneWeekInMillis = 7 * 24 * 60 * 60 * 1000;
-
-    console.log(currentTime - lastUpdatedTime)
-
 
     if(currentTime - lastUpdatedTime < oneWeekInMillis){
         return false;
@@ -69,13 +65,11 @@ const shouldDownloadData = async () => {
 
     return lastUpdate !== currentVersion;
 };
-
+async function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 const manageData = async () => {
     try {
-        if (!await shouldDownloadData()) {
-            console.log("Data is up-to-date. No download needed.");
-            return;
-        }
         console.log("Started fetching")
         const rawData = await fetchAllData();
         console.log("Fetched all data!");
@@ -88,4 +82,4 @@ const manageData = async () => {
     }
 };
 
-export { manageData };
+export { manageData, shouldDownloadData };
