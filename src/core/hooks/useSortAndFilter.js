@@ -19,7 +19,7 @@ export const useSortAndFilter = () => {
 
     const { lists } = useContext(ShoppingListContext);
     
-    const maxItemsVal = Math.max(...lists.map(list => list.items.length)) + 100
+    const maxItemsVal = Math.max(...lists.map(list => list.items.length));
     
     const [minMaxVals, setMinMaxVals] = useState([0, maxItemsVal]);
     
