@@ -1,32 +1,46 @@
-import { useContext, useState } from "react";
+// External imports
+import { useContext, useEffect, useState } from "react";
 import { ShoppingListContext } from "../contexts/ShoppingListContext";
 
-const options = [
-    {key:"לפי תאריך", value:"updateTime"},
-    {key:"לפי שם", value:"name"},
-    {key:"לפי גודל", value:"amount"},
-]
+// Constants
+const SORT_FILTER_OPTIONS = [
+    { key: "לפי תאריך", value: "updateTime" },
+    { key: "לפי שם", value: "name" },
+    { key: "לפי גודל", value: "amount" },
+];
 
+/**
+ * Custom hook for sorting and filtering shopping lists
+ * Provides functionality for sorting by different criteria and filtering by date, name, and size
+ * 
+ * @returns {Object} Sorting and filtering methods and states
+ */
 export const useSortAndFilter = () => {
-    // sort states
+    // Sorting states
     const [sortKey, setSortKey] = useState("updateTime");
     const [isAscending, setIsAscending] = useState(false);
 
-    // filter states
+    // Filtering states
     const [startDate, setStartDate] = useState(undefined);
     const [endDate, setEndDate] = useState(undefined);
     const [name, setName] = useState("");
-
-    const { lists } = useContext(ShoppingListContext);
     
-    const maxItemsVal = Math.max(...lists.map(list => list.items.length));
-    
+    // Context and derived states
+    const { maxItemsVal } = useContext(ShoppingListContext);
     const [minMaxVals, setMinMaxVals] = useState([0, maxItemsVal]);
-    
+
+    // Effects
+    useEffect(() => {
+        setMinMaxVals([0, maxItemsVal]);
+    }, [maxItemsVal]);
+
+    /**
+     * Sorts lists based on current sort key and direction
+     * @param {Array} lists - Lists to sort
+     * @returns {Array} Sorted lists
+     */
     const sortLists = (lists) => {
-        if (sortKey === "") {
-            return lists;
-        }
+        if (sortKey === "") return lists;
 
         return lists.sort((a, b) => {
             let comparison = 0;
@@ -43,50 +57,79 @@ export const useSortAndFilter = () => {
         });
     };
 
+    /**
+     * Filters lists based on current filter criteria
+     * @param {Array} lists - Lists to filter
+     * @returns {Array} Filtered lists
+     */
     const filterLists = (lists) => {
-        // filter by name
-        lists = lists.filter(list => list.name.toLowerCase().includes(name.toLowerCase())); 
+        // Name filter
+        lists = lists.filter(list => 
+            list.name.toLowerCase().includes(name.toLowerCase())
+        ); 
         
-        console.log("DATES: ", startDate, endDate);
-
-        // filter by date
+        // Date filter
         lists = lists.filter(list => {
-            if(startDate && endDate){
+            if (startDate && endDate) {
                 return list.updateTime >= startDate && list.updateTime <= endDate;
             }
-            if(startDate){
-                return list.updateTime >= startDate && list.updateTime <= new Date(startDate).getTime() + 24 * 60 * 60 * 1000 - 1
+            if (startDate) {
+                const dayEnd = new Date(startDate).getTime() + 24 * 60 * 60 * 1000 - 1;
+                return list.updateTime >= startDate && list.updateTime <= dayEnd;
             }
             return true;
-        })
+        });
 
-        // filter by size
+        // Size filter
         lists = lists.filter(list => {
-            return list.items.length >= minMaxVals[0] && list.items.length <= minMaxVals[1]
-        })
+            const amount = list.items.length;
+            return amount >= minMaxVals[0] && amount <= minMaxVals[1];
+        });
 
         return lists;
     };
 
-    const getSortValues = () => {
-        return {sortKey, isAscending}
-    }
+    // Getter and setter methods
+    const getSortValues = () => ({ sortKey, isAscending });
 
     const setSortValues = (key) => {
         setSortKey(key);
         setIsAscending(prev => (sortKey === key ? !prev : false));
     };
 
-    const getFilterValues = () => {
-        return {startDate, endDate, name, minMaxVals, maxItemsVal}
-    }
+    const getFilterValues = () => ({
+        startDate,
+        endDate,
+        name,
+        minMaxVals,
+        maxItemsVal
+    });
 
     const setFilterValues = {
-        setStartDate: (startDate) => setStartDate(startDate),
-        setEndDate: (endDate) => setEndDate(endDate),
-        setName: (name) => setName(name),
-        setMinMaxVals: (minMaxVals) => setMinMaxVals(minMaxVals),
-    }
+        setStartDate,
+        setEndDate,
+        setName,
+        setMinMaxVals,
+    };
 
-    return { options, getSortValues, setSortValues, getFilterValues, setFilterValues, sortLists, filterLists };
+    /**
+     * Resets all filters to their default values
+     */
+    const resetFilters = () => {
+        setStartDate(undefined);
+        setEndDate(undefined);
+        setName("");
+        setMinMaxVals([0, maxItemsVal]);
+    };
+
+    return {
+        options: SORT_FILTER_OPTIONS,
+        getSortValues,
+        setSortValues,
+        getFilterValues,
+        setFilterValues,
+        resetFilters,
+        sortLists,
+        filterLists
+    };
 };

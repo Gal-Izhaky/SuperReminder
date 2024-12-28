@@ -1,64 +1,64 @@
-// react imports
+// External imports
 import { useState, useEffect } from "react";
 
-// imports
+// Internal imports
 import { manageData, shouldDownloadData } from "./src/firebase/DataManager";
 
-// components
+// Components
 import Spinner from "./src/components/Spinner/Spinner";
 import MainContent from "./src/components/MainContent/MainContent";
 
+// Constants
+const CHECK_INTERVAL = 60 * 60 * 1000; // 1 hour in milliseconds
 
+/**
+ * App Component
+ * Root component that manages data fetching and displays main content
+ */
 const App = () => {
+    // State management
     const [fetchingData, setFetchingData] = useState(false);
     
+    // Data fetching effect
     useEffect(() => {
-        if(!fetchingData){
-            return 
-        }
+        if (!fetchingData) return;
 
         const fetchData = async () => {
-            try{
-                console.log(fetchingData)
+            try {
                 await manageData();
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
                 setFetchingData(false);
             }
-        }
+        };
         fetchData();
+    }, [fetchingData]);
 
-    }, [fetchingData])
-
+    // Periodic update effect
     useEffect(() => {
         const startFetching = async () => {
-            if(fetchingData || !await shouldDownloadData()){
+            if (fetchingData || !await shouldDownloadData()) {
                 console.log("Data is up-to-date. No download needed.");
-                return 
+                return;
             }
             setFetchingData(true);
-        }
+        };
 
-        // Run on app load
+        // Initial fetch on app load
         startFetching();
         
-        // Set up interval for periodic updates
-        const interval = setInterval(() => {
-            startFetching()
-        }, 60 * 60 * 1000); // Check every hour
-
-        return () => clearInterval(interval)
+        // Set up periodic checks
+        const interval = setInterval(startFetching, CHECK_INTERVAL);
+        return () => clearInterval(interval);
     }, []);
 
-    // wrap the content in the context provider and the navigation provider
-    return <>
-        {
-            fetchingData 
-            ?   <Spinner /> 
-            :   <MainContent />
-        }
-    </>
-}
+    // Render
+    return (
+        <>
+            {fetchingData ? <Spinner /> : <MainContent />}
+        </>
+    );
+};
 
 export default App;

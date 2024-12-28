@@ -1,11 +1,33 @@
+// External imports
 import { database, ref, get } from "./Config";
 import FirebaseData from "../data/FirebaseData";
 
+// Constants
+const ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000;
+
+/**
+ * Fetches all data from Firebase database
+ * @returns {Promise<Object>} Raw database snapshot
+ */
 const fetchAllData = async () => {
     const snapshot = await get(ref(database, "/"));
     return snapshot.val();
 };
 
+/**
+ * Fetches last update timestamp from metadata
+ * @returns {Promise<string>} Last update timestamp
+ */
+const fetchMetadata = async () => {
+    const snapshot = await get(ref(database, "/metadata/last-updated"));
+    return snapshot.val();
+};
+
+/**
+ * Parses raw Firebase data into structured format
+ * @param {Object} rawData - Raw data from Firebase
+ * @returns {Object} Parsed data with metadata, supermarkets, and items
+ */
 const parseFunction = (rawData) => {
     // Parse metadata
     const metadata = {
@@ -40,41 +62,50 @@ const parseFunction = (rawData) => {
     return { metadata, supermarkets, items };
 };
 
-const fetchMetadata = async () => {
-    const snapshot = await get(ref(database, "/metadata/last-updated"));
-    return snapshot.val();
-  };
-
+/**
+ * Determines if data should be downloaded based on time and version
+ * @returns {Promise<boolean>} Whether data should be downloaded
+ */
 const shouldDownloadData = async () => {
-    // check for current version
+    // Check for current version
     const currentVersion = FirebaseData.getCurrentUpdateTime();
-    if (!currentVersion){
+    if (!currentVersion) {
         return true;
-    } 
+    }
 
+    // Check time-based update requirement
     const lastUpdatedTime = parseInt(currentVersion, 10);
     const currentTime = Date.now();
-    const oneWeekInMillis = 7 * 24 * 60 * 60 * 1000;
-
-    if(currentTime - lastUpdatedTime < oneWeekInMillis){
+    if (currentTime - lastUpdatedTime < ONE_WEEK_IN_MILLIS) {
         return false;
-    };
+    }
 
-    // check for database version (in case the data did not update)
-    const lastUpdate = fetchMetadata()
-
+    // Check for database version differences
+    const lastUpdate = await fetchMetadata();
     return lastUpdate !== currentVersion;
 };
-async function sleep(ms) {
+
+/**
+ * Utility function for adding delays
+ * @param {number} ms - Milliseconds to sleep
+ */
+const sleep = async (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
-}
+};
+
+/**
+ * Main data management function
+ * Fetches, parses, and stores data in Realm
+ */
 const manageData = async () => {
     try {
-        console.log("Started fetching")
+        console.log("Started fetching");
         const rawData = await fetchAllData();
         console.log("Fetched all data!");
+        
         const parsedData = parseFunction(rawData);
         console.log("Parsed the data");
+        
         FirebaseData.writeData(parsedData);
         console.log("Data successfully downloaded and stored in Realm.");
     } catch (error) {
@@ -82,4 +113,5 @@ const manageData = async () => {
     }
 };
 
+// Exports
 export { manageData, shouldDownloadData };

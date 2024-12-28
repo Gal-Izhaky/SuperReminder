@@ -1,81 +1,89 @@
-// react imports
+// External imports
+import React, { useCallback, useContext, useState } from 'react';
 import { Text, TouchableOpacity, View, Pressable } from 'react-native';
-import React, { useContext, useState } from 'react';
 
-// core imports
+// Core imports
 import { ShoppingListContext } from '../../core/contexts/ShoppingListContext';
 import { useSortAndFilter } from '../../core/hooks/useSortAndFilter';
+import styles from "./ShoppingLists.styles";
 
-import styles from "./ShoppingLists.styles"
-
-// components
-
+// Component imports
 import ShopList from '../../components/Shoplist/ShopList';
 import Header from '../../components/Header/Header';
 import Confirmation from '../../components/Confirmation/ConfirmationWindow/Confirmation';
 import SortAndFilter from '../../components/SortAndFilter/SortAndFilter/SortAndFilter';
 
+/**
+ * ShoppingLists Component
+ * Main screen for displaying and managing shopping lists
+ * Includes sorting, filtering, and list creation functionality
+ */
 const ShoppingLists = () => {
-    const { addList } = useContext(ShoppingListContext)
-    const [ visible, setVisible ] = useState(false)
-    const [isDropdownVisible, setDropdownVisible] = useState(false); // Control dropdown visibility
+    // Context and state management
+    const { addList } = useContext(ShoppingListContext);
+    const [visible, setVisible] = useState(false);
+    const [isDropdownVisible, setDropdownVisible] = useState(false);
 
-    // add list confirmation
+    // List management handlers
     const confirmAdd = () => setVisible(true);
-    const handleAdd = (name) => { 
-        if(!visible){
-            return;
-        }
-        setVisible(false); 
-        addList(name); 
+    const handleAdd = (name) => {
+        if (!visible) return;
+        setVisible(false);
+        addList(name);
     };
     const handleCancel = () => setVisible(false);
 
-    // filter and sort hook
-    const { 
-        options, 
-        getSortValues, 
-        setSortValues, 
-        getFilterValues, 
+    // Sort and filter functionality
+    const {
+        options,
+        getSortValues,
+        setSortValues,
+        getFilterValues,
         setFilterValues,
-        sortLists, 
-        filterLists 
+        resetFilters,
+        sortLists,
+        filterLists
     } = useSortAndFilter();
 
-    // Hide dropdown if clicking outside of it
-    const handleOutsidePress = () => {
+    // Dropdown visibility handler
+    const handleOutsidePress = useCallback(() => {
         if (isDropdownVisible) setDropdownVisible(false);
-    };
+    }, [isDropdownVisible]);
 
-    // wrap in pressable to be able to hide dropdown when clicking on another thing
     return (
         <Pressable onPress={handleOutsidePress} style={styles.pressableBackground}>
-            <Header title="רשימות"/>
+            <Header title="רשימות" />
             <View style={styles.top}>
-                {/* header */}
-
-                <SortAndFilter 
-                    options={options} 
-                    getSortValues={getSortValues} 
-                    setSortValues={setSortValues} 
+                {/* Sort and filter controls */}
+                <SortAndFilter
+                    options={options}
+                    getSortValues={getSortValues}
+                    setSortValues={setSortValues}
                     getFilterValues={getFilterValues}
                     setFilterValues={setFilterValues}
-                    isDropdownVisible={isDropdownVisible} 
-                    setDropdownVisible={setDropdownVisible} 
+                    isDropdownVisible={isDropdownVisible}
+                    setDropdownVisible={setDropdownVisible}
                 />
-                
-                <ShopList sortLists={sortLists} filterLists={filterLists}/>
-                
-                <TouchableOpacity 
+
+                {/* Shopping lists display */}
+                <ShopList
+                    resetFilters={resetFilters}
+                    sortLists={sortLists}
+                    filterLists={filterLists}
+                />
+
+                {/* Add new list button */}
+                <TouchableOpacity
                     style={styles.button}
                     activeOpacity={1}
-                    onPress={confirmAdd}>
-
+                    onPress={confirmAdd}
+                >
                     <Text style={styles.buttonText}>
                         הוסף רשימה
                     </Text>
                 </TouchableOpacity>
 
+                {/* Add list confirmation modal */}
                 <Confirmation
                     visible={visible}
                     onConfirm={handleAdd}
@@ -86,6 +94,6 @@ const ShoppingLists = () => {
             </View>
         </Pressable>
     );
-}
+};
 
-export default ShoppingLists
+export default ShoppingLists;

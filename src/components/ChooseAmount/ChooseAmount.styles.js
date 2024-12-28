@@ -19,18 +19,30 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginHorizontal: 15,
     },
+    buttonSmall: {
+        width: 25,
+        height: 25,
+        backgroundColor: colors.themeRed,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginHorizontal: 5,
+    },
     disabledButton: {
         backgroundColor: 'darkred',
     },
     plusMinusIcon: {
-        height: 15,
-        width: 15,
+        height: 18,
+        width: 18,
         textAlign: "center",
         color: "white",
         tintColor: "white",
-        fontSize: 28,
         padding: 0,
         fontWeight: 'bold',
+    },
+    plusMinusIconSmall: {
+        height: 15,
+        width: 15,
     },
     minusIcon: {
         height: 20,
@@ -41,14 +53,19 @@ const styles = StyleSheet.create({
         minWidth: 40,
         textAlign: 'center',
     },
+    amountTextSmall: {
+        fontSize: 18,
+        maxWidth: 80,
+    },  
     input: {
         direction: "rtl",
-        fontSize: 24,
-        fontWeight: 'bold',
-        minWidth: 40,
-        textAlign: 'center',
         borderBottomWidth: 1,
         borderBottomColor: colors.themeRed,
+        maxWidth: 140,
+        height: 50,
+    },
+    inputSmall: {
+        maxWidth: 80,
     },
     resetButton: {
         padding: 8,

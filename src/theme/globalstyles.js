@@ -34,7 +34,7 @@ const globalstyles = StyleSheet.create({
         width: 35,
         height: 35,
         resizeMode: 'stretch',
-        marginLeft: 10,
+        marginLeft: 7,
     },
     textRight: {
         textAlign: "right"

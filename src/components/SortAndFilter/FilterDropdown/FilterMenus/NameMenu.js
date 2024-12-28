@@ -1,38 +1,59 @@
+// External imports
 import React from "react";
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import globalstyles from "../../../../theme/globalstyles";
+import { 
+    Image, 
+    StyleSheet, 
+    Text, 
+    TextInput, 
+    TouchableOpacity, 
+    View 
+} from "react-native";
 
+// Styles and assets
+import globalstyles from "../../../../theme/globalstyles";
 const refreshImage = require("../../../../assets/images/refresh.png");
 
+/**
+ * NameMenu Component
+ * Provides an input field for list name with character limit and reset functionality
+ *
+ * @param {string} name - Current name value
+ * @param {Function} setName - Callback to update name value
+ */
 const NameMenu = ({ name, setName }) => {
     return (
         <>
+            {/* Name input container */}
             <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
                     placeholder="שם הרשימה"
                     maxLength={15}
                     value={name}
-                    onChangeText={(val) => {
-                        setName(val);
-                    }}
+                    onChangeText={setName}
                     keyboardType="visible-password"
                     underlineColorAndroid="transparent"
                 />
-
-                <Text style={styles.charIndicator}>{name.length}/15</Text>
+                
+                {/* Character count indicator */}
+                <Text style={styles.charIndicator}>
+                    {name.length}/15
+                </Text>
             </View>
+
+            {/* Reset button */}
             <TouchableOpacity
                 activeOpacity={1}
                 style={styles.refreshName}
-                onPress={() => setName("")}>
-                    
+                onPress={() => setName("")}
+            >
                 <Image style={styles.refreshIcon} source={refreshImage} />
             </TouchableOpacity>
         </>
     );
 };
 
+// Styles
 const styles = StyleSheet.create({
     inputContainer: {
         width: "92%",

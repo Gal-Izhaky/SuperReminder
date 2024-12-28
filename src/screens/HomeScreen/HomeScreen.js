@@ -1,24 +1,41 @@
+// External imports
 import { View, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-// styles
-import styles from "./HomeScreen.styles";
+// Internal imports
 import Header from "../../components/Header/Header";
+import styles from "./HomeScreen.styles";
 
+/**
+ * HomeScreen Component
+ * Main navigation hub for the application
+ * Displays main menu options including shopping lists and product scanning
+ */
 const HomeScreen = () => {
+    // Navigation setup
     const navigation = useNavigation();
 
+    /**
+     * Navigation handler
+     * @param {string} destination - Screen name to navigate to
+     * @returns {Function} Navigation function
+     */
     const navigate = (destination) => () => {
-        console.log(destination);
         navigation.navigate(destination);
     };
 
+    // Render
     return (
         <>
+            {/* Header Section */}
             <Header title={"מסך הבית"} noBack={true} />
+
+            {/* Main Content */}
             <View style={styles.container}>
+                {/* App Title */}
                 <Text style={styles.appName}>Super Reminder</Text>
 
+                {/* Navigation Buttons */}
                 <TouchableOpacity
                     style={[styles.button, styles.shoppingListButton]}
                     activeOpacity={0.9}

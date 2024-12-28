@@ -9,6 +9,9 @@ const styles = StyleSheet.create({
     },
     top: {
         alignItems: 'right',
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
     },
     buttonText: {
         color:"white",

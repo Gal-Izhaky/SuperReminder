@@ -1,14 +1,27 @@
-// react imports
+// External imports
 import { ActivityIndicator, Text, View } from "react-native";
 
-// styles
+// Styles
 import styles from "./Spinner.styles";
 
+/**
+ * Spinner Component
+ * Displays a loading spinner with the app name
+ * Used as a loading indicator throughout the application
+ */
 const Spinner = () => {
+    // Render
     return (
         <View style={styles.container}>
+            {/* App name display */}
             <Text style={styles.appName}>Super Reminder</Text>
-            <ActivityIndicator style={styles.spinner} size="large" color="#ff4500" />
+
+            {/* Loading indicator */}
+            <ActivityIndicator 
+                style={styles.spinner} 
+                size="large" 
+                color="#ff4500" 
+            />
         </View>
     );
 };

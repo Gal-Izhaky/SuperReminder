@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.background,
     },
     normalHeight: {
-        height:"40%",
+        height:"60%",
     },
     autoMinHeight: {
         minHeight: "auto",

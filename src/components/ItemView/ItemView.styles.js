@@ -13,10 +13,17 @@ const styles = StyleSheet.create({
     right: globalstyles.textRight,
     text: {
         fontWeight: globalstyles.semiBoldText,
-        maxWidth: 200,
+        maxWidth: 165,
         textAlign: "right",
         fontSize: 22,
     },
+    alignLeft: {
+        display: "flex",
+        flexDirection: "row-reverse",
+        alignContent: "center",
+        alignItems: "center",
+        justifyContent: "flex-start"
+    }
 })
     
 

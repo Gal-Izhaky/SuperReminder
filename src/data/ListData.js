@@ -1,15 +1,25 @@
-// imports
+// External imports
 import { realm } from './Schemas';
 
-// database functions
+/**
+ * Database operations for shopping lists
+ * Contains CRUD operations for lists and list items
+ */
 
-// function to get all the current saved data
+// List Operations
+/**
+ * Retrieves all shopping lists from the database
+ * @returns {Array} Array of shopping lists
+ */
 const getShoppingLists = () => {
     const lists = realm.objects('ShoppingList');
-    return Array.from(lists); // Convert to an array if needed
+    return Array.from(lists);
 };
 
-// function to create a new shopping list
+/**
+ * Creates a new shopping list
+ * @param {Object} newList - The shopping list object to create
+ */
 const createShoppingList = (newList) => {
     try {
         realm.write(() => {
@@ -20,41 +30,40 @@ const createShoppingList = (newList) => {
     }
 };
 
-// function to change a list's name
+/**
+ * Updates a shopping list's name
+ * @param {string} key - List identifier
+ * @param {string} newName - New name for the list
+ * @param {number} updateTime - Timestamp of the update
+ */
 const editListName = (key, newName, updateTime) => {
     try {
         realm.write(() => {
-            // Find the shopping list to delete
             const shoppingList = realm.objectForPrimaryKey('ShoppingList', key);
-
             if (!shoppingList) {
                 console.log(`No shopping list found with key ${key}.`);
-                return
+                return;
             }
-                
-            // set the new name
-            shoppingList.name = newName
-            
-            // Update key after changing the name
+            shoppingList.name = newName;
             shoppingList.updateTime = updateTime;
         });
     } catch (error) {
         console.error('Error editing shopping list name:', error);
     }
-}
+};
 
-// function to remove a shopping list with a key of listKey
+/**
+ * Removes a shopping list
+ * @param {string} listKey - List identifier to remove
+ */
 const removeShoppingList = (listKey) => {
     try {
         realm.write(() => {
-            // Find the shopping list to delete
             const shoppingListToDelete = realm.objectForPrimaryKey('ShoppingList', listKey);
-
             if (!shoppingListToDelete) {
                 console.log(`No shopping list found with key ${listKey}.`);
-                return
+                return;
             }
-                
             realm.delete(shoppingListToDelete);
         });
     } catch (error) {
@@ -62,32 +71,31 @@ const removeShoppingList = (listKey) => {
     }
 };
 
-// function to add an item to a list, with key as the key
+// Item Operations
+/**
+ * Adds or updates an item in a shopping list
+ * @param {string} key - List identifier
+ * @param {string} itemKey - Item identifier
+ * @param {number} amount - Quantity of the item
+ * @param {number} updateTime - Timestamp of the update
+ */
 const addShopItem = (key, itemKey, amount, updateTime) => {
     try {
         realm.write(() => {
-            // Find the shopping list by its key value
             const shoppingList = realm.objectForPrimaryKey('ShoppingList', key);
-
             if (!shoppingList) {
                 console.log(`No shopping list found with key ${key}.`);
-                return
-            }                
-            
-            // Check if the item already exists in the list
-            const existingItemIndex = shoppingList.items.findIndex(item => item.key === itemKey);
+                return;
+            }
 
-            // Create the new item object
-
-            if (existingItemIndex >= 0) {
-                // If item exists, update its amount
-                shoppingList.items[existingItemIndex].amount += amount;
-            }else{
-                const newItem = { key: itemKey, amount: amount };
+            const itemInList = shoppingList.items.find(item => item.key === itemKey);
+            if (itemInList) {
+                itemInList.amount += amount;
+            } else {
+                const newItem = realm.create('ListItem', { key: itemKey, amount: amount });
                 shoppingList.items.push(newItem);
             }
 
-            // Add the new item to the items list of the shopping list
             shoppingList.updateTime = updateTime;
         });
     } catch (error) {
@@ -95,39 +103,78 @@ const addShopItem = (key, itemKey, amount, updateTime) => {
     }
 };
 
-// function to remove an item with a code of itemCode, in a list with key as the key
+/**
+ * Removes an item from a shopping list
+ * @param {string} key - List identifier
+ * @param {string} itemCode - Item identifier to remove
+ * @param {number} updateTime - Timestamp of the update
+ */
 const removeShopItem = (key, itemCode, updateTime) => {
     try {
         realm.write(() => {
-            // Find the shopping list by its key value
+            // Find the shopping list
             const shoppingList = realm.objectForPrimaryKey('ShoppingList', key);
-
             if (!shoppingList) {
                 console.log(`No shopping list found with key ${key}.`);
-                return
+                return;
             }
 
-            // Find the index of the item to delete
-            const itemIndex = shoppingList.items.findIndex(item => item.key === itemCode);
+            // Find item index
+            const itemIndex = shoppingList.items.findIndex(
+                item => item.key === itemCode
+            );
 
+            // Validate item exists
             if (itemIndex === -1) {
-                console.log(`No item found with code ${itemCode} in shopping list: ${shoppingList.name}.`);
-                return
+                console.log(
+                    `REMOVESHOPITEM: No item found with code ${itemCode} in shopping list: ${shoppingList.name}.`
+                );
+                return;
             }
                 
-            // Remove the item from the items list of the shopping list
+            // Remove item and update timestamp
             shoppingList.items.splice(itemIndex, 1);
-            console.log(`Item with code ${itemCode} removed from shopping list: ${shoppingList.name}.`);
-
-            // Update key after removing the item
             shoppingList.updateTime = updateTime;
         });
     } catch (error) {
-        console.error('Error adding item to shopping list:', error);
+        console.error('Error removing item from shopping list:', error);
     }
 };
 
-// Exporting as an object
+/**
+ * Updates the amount of an item in a shopping list
+ * @param {string} key - List identifier
+ * @param {string} itemCode - Item identifier
+ * @param {number} amount - New amount to set
+ * @param {number} updateTime - Timestamp of the update
+ */
+const setShopItemAmount = (key, itemCode, amount, updateTime) => {
+    try {
+        realm.write(() => {
+            // Find the shopping list
+            const shoppingList = realm.objectForPrimaryKey('ShoppingList', key);
+            if (!shoppingList) {
+                console.log(`No shopping list found with key ${key}.`);
+                return;
+            }
+
+            // Find and update the item
+            const item = shoppingList.items.find(item => item.key === itemCode);
+            if (!item) {
+                console.log(`SHOPITEMAMOUNT: No item found with code ${itemCode} in shopping list: ${shoppingList.name}.`);
+                return;
+            }
+
+            // Update amount and timestamp
+            item.amount = amount;
+            shoppingList.updateTime = updateTime;
+        });
+    } catch (error) {
+        console.error('Error updating item amount in shopping list:', error);
+    }
+};
+
+// Export database operations
 const ListData = {
     getShoppingLists,
     createShoppingList,
@@ -135,6 +182,7 @@ const ListData = {
     editListName,
     addShopItem,
     removeShopItem,
+    setShopItemAmount,
 };
 
-export default ListData
+export default ListData;

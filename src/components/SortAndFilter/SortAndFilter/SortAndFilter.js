@@ -1,39 +1,87 @@
-import styles from "./SortAndFilter.styles";
+// External imports
 import { View } from "react-native";
+import { useCallback } from "react";
 
+// Internal imports
 import SortDropdown from "../SortDropdown/SortDropdown";
 import FilterDropdown from "../FilterDropdown/FilterDropdown";
 import DropdownButton from "../DropdownButton/DropdownButton";
-import { useCallback } from "react";
 
-const SortAndFilter = ({ options, getSortValues, setSortValues, getFilterValues, setFilterValues, isDropdownVisible, setDropdownVisible  }) => {
-    const { sortKey, isAscending } = getSortValues()
-    const filterValues = getFilterValues()
-    
+// Styles
+import styles from "./SortAndFilter.styles";
+
+// Assets
+const sortIcon = require("../../../assets/images/sortImage.png");
+const filterIcon = require("../../../assets/images/filterImage.png");
+
+/**
+ * SortAndFilter Component
+ * Provides sorting and filtering functionality with dropdown menus
+ *
+ * @param {Object} options - Available sort and filter options
+ * @param {Function} getSortValues - Callback to get current sort values
+ * @param {Function} setSortValues - Callback to update sort values
+ * @param {Function} getFilterValues - Callback to get current filter values
+ * @param {Function} setFilterValues - Callback to update filter values
+ * @param {string} isDropdownVisible - Current visible dropdown ("sort"/"filter"/""")
+ * @param {Function} setDropdownVisible - Callback to toggle dropdown visibility
+ */
+const SortAndFilter = ({
+    options,
+    getSortValues,
+    setSortValues,
+    getFilterValues,
+    setFilterValues,
+    isDropdownVisible,
+    setDropdownVisible,
+}) => {
+    // Get current values
+    const { sortKey, isAscending } = getSortValues();
+    const filterValues = getFilterValues();
+
+    // Handlers
     const toggleDropdown = useCallback((value) => {
-        setDropdownVisible((prev) => prev !== value ? value : ""); 
+        setDropdownVisible((prev) => (prev !== value ? value : ""));
     }, []);
 
+    // Dropdown configuration
+    const sortConfig = {
+        text: "מיון",
+        icon: sortIcon,
+        toggleFunction: () => toggleDropdown("sort"),
+    };
+
+    const filterConfig = {
+        text: "סינון",
+        icon: filterIcon,
+        toggleFunction: () => toggleDropdown("filter"),
+    };
+
+    // Dynamic dropdown render
     const getDropdown = () => {
         if (isDropdownVisible === "sort") {
-            return <SortDropdown options={options} setValues={setSortValues} sortKey={sortKey} isAscending={isAscending}/>;
-        } else if (isDropdownVisible === "filter") {
-            return <FilterDropdown options={options} setValues={setFilterValues} filterValues={filterValues}/>;
+            return (
+                <SortDropdown
+                    options={options}
+                    setValues={setSortValues}
+                    sortKey={sortKey}
+                    isAscending={isAscending}
+                />
+            );
+        }
+        if (isDropdownVisible === "filter") {
+            return (
+                <FilterDropdown
+                    options={options}
+                    setValues={setFilterValues}
+                    filterValues={filterValues}
+                />
+            );
         }
         return null;
     };
 
-    const sortConfig = {
-        text: "מיון",
-        icon: require("../../../assets/images/sortImage.png"),
-        toggleFunction: () => toggleDropdown("sort"),
-    };
-    const filterConfig = {
-        text: "סינון",
-        icon: require("../../../assets/images/filterImage.png"),
-        toggleFunction: () => toggleDropdown("filter"),
-    };
-
+    // Render
     return (
         <View style={styles.container}>
             <View style={styles.rowContainer}>
