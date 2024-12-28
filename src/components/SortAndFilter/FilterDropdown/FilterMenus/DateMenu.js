@@ -3,7 +3,7 @@ import DateTimePicker from "react-native-ui-datepicker";
 
 const refreshImage = require("../../../../assets/images/refresh.png")
 
-const DateMenu = (startDate, endDate, setDates) => {
+const DateMenu = ({startDate, endDate, setDates}) => {
     return <>
         <DateTimePicker
             height={250}
@@ -28,8 +28,8 @@ const DateMenu = (startDate, endDate, setDates) => {
 
 const styles = StyleSheet.create({
     refreshIcon: {
-        width:20,
-        height:20,
+        width:23,
+        height:23,
     },
     refreshDate: {
         position: "absolute",

@@ -64,7 +64,7 @@ const Confirmation = ({ visible, onConfirm, onCancel, title, type }) => {
             return;
         }
 
-        if (name === "") {
+        if (name.trim() === "") {
             return;
         }
         onConfirm(name);

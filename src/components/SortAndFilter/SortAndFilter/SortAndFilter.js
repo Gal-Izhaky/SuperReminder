@@ -4,20 +4,21 @@ import { View } from "react-native";
 import SortDropdown from "../SortDropdown/SortDropdown";
 import FilterDropdown from "../FilterDropdown/FilterDropdown";
 import DropdownButton from "../DropdownButton/DropdownButton";
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 
-const SortAndFilter = ({ sortOptions, getSortValues, setSortValues, isDropdownVisible, setDropdownVisible  }) => {
+const SortAndFilter = ({ options, getSortValues, setSortValues, getFilterValues, setFilterValues, isDropdownVisible, setDropdownVisible  }) => {
     const { sortKey, isAscending } = getSortValues()
-
+    const filterValues = getFilterValues()
+    
     const toggleDropdown = useCallback((value) => {
         setDropdownVisible((prev) => prev !== value ? value : ""); 
     }, []);
 
     const getDropdown = () => {
         if (isDropdownVisible === "sort") {
-            return <SortDropdown options={sortOptions} setValues={setSortValues} sortKey={sortKey} isAscending={isAscending}/>;
+            return <SortDropdown options={options} setValues={setSortValues} sortKey={sortKey} isAscending={isAscending}/>;
         } else if (isDropdownVisible === "filter") {
-            return <FilterDropdown options={sortOptions} setValues={setSortValues} sortKey={sortKey} isAscending={isAscending}/>;
+            return <FilterDropdown options={options} setValues={setFilterValues} filterValues={filterValues}/>;
         }
         return null;
     };

@@ -38,7 +38,7 @@ const ShopList = ( { sortLists, filterLists }) => {
 
     return <>
         <FlatList
-            data={sortLists(lists)}
+            data={sortLists(filterLists(lists))}
             style={styles.container}
             renderItem={({ item }) => (
                 <CartView list={item} handleDelete={() => {confirmDelete(item)}}/>

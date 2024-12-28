@@ -32,7 +32,15 @@ const ShoppingLists = () => {
     const handleCancel = () => setVisible(false);
 
     // filter and sort hook
-    const { sortOptions, getSortValues, setSortValues, sortLists, filterLists } = useSortAndFilter();
+    const { 
+        options, 
+        getSortValues, 
+        setSortValues, 
+        getFilterValues, 
+        setFilterValues,
+        sortLists, 
+        filterLists 
+    } = useSortAndFilter();
 
     // Hide dropdown if clicking outside of it
     const handleOutsidePress = () => {
@@ -47,9 +55,11 @@ const ShoppingLists = () => {
                 {/* header */}
 
                 <SortAndFilter 
-                    sortOptions={sortOptions} 
+                    options={options} 
                     getSortValues={getSortValues} 
                     setSortValues={setSortValues} 
+                    getFilterValues={getFilterValues}
+                    setFilterValues={setFilterValues}
                     isDropdownVisible={isDropdownVisible} 
                     setDropdownVisible={setDropdownVisible} 
                 />

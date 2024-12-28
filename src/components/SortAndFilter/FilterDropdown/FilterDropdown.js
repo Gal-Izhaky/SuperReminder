@@ -13,19 +13,8 @@ import DateMenu from './FilterMenus/DateMenu.js';
 import NameMenu from './FilterMenus/NameMenu.js';
 import SizeMenu from './FilterMenus/SizeMenu.js';
 
-const FilterDropdown = ({ options, sortKey, isAscending, setValues }) => {    
+const FilterDropdown = ({ options, filterValues, setValues }) => {    
     const [openMenu, setOpenMenu] = useState(null);
-
-    const [startDate, setStartDate] = useState(undefined);
-    const [endDate, setEndDate] = useState(undefined);
-
-    const [name, setName] = useState("");
-
-    const { lists } = useContext(ShoppingListContext);
-    
-    const maxItemsVal = Math.max(...lists.map(list => list.items.length)) + 0
-    const [minMaxVals, setMinMaxVals] = useState([0, maxItemsVal]);
-
     
     const getArrow = (menu) => {
         return menu === openMenu ?
@@ -42,8 +31,8 @@ const FilterDropdown = ({ options, sortKey, isAscending, setValues }) => {
     }
 
     const setDates = ({startDate, endDate}) => {
-        setStartDate(startDate);
-        setEndDate(endDate);
+        setValues.setStartDate(startDate);
+        setValues.setEndDate(endDate);
     }
     
     return (
@@ -65,14 +54,19 @@ const FilterDropdown = ({ options, sortKey, isAscending, setValues }) => {
                         />
 
                     </TouchableOpacity>
+
                     {option.value === openMenu &&
                         (
-                            option.value === "updateTime" ? DateMenu(startDate, endDate, setDates) :
-                            option.value === "name" ? NameMenu(name, setName) : 
-                            option.value === "amount" ? SizeMenu(minMaxVals, maxItemsVal, setMinMaxVals) :
+                            option.value === "updateTime" 
+                            ? <DateMenu startDate={filterValues.startDate} endDate={filterValues.endDate} setDates={setDates}/> :
+                            option.value === "name" 
+                            ? <NameMenu name={filterValues.name} setName={setValues.setName}/> : 
+                            option.value === "amount" 
+                            ? <SizeMenu minMaxVals={filterValues.minMaxVals} maxItemsVal={filterValues.maxItemsVal} setMinMaxVals={setValues.setMinMaxVals}/> :
                             ""
                         )
                     }
+                    
                 </TouchableOpacity>
             })}
         </View>
