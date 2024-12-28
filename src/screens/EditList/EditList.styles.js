@@ -16,13 +16,13 @@ const styles = StyleSheet.create({
         fontWeight: globalstyles.boldText,
     },
     button: {
-        marginTop: 30,
+        position: "absolute",
+        bottom: 60,
         backgroundColor: colors.buttonDark,
         borderRadius: 12,
         paddingVertical:10,
         paddingHorizontal:20,
-        marginRight:"5%",
-        marginLeft: "auto",
+        alignSelf: "center",
     },
     txt: {
         fontSize: 26,

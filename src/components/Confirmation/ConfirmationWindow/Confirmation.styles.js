@@ -38,6 +38,19 @@ const styles = StyleSheet.create({
         fontSize: 24,
     },
     charIndicator: globalstyles.charIndicator,
+    itemPropertyText: {
+        fontSize: 18,
+        color: "#3b3b3b",
+        marginVertical: 10,
+        textAlign: "right",
+        width: "90%",
+    },
+    notYetSelected: {
+        textAlign: "center",
+        fontSize: 18,
+        color: "#7a7a7a",
+        marginTop: 10,
+    }
 });
 
 export default styles

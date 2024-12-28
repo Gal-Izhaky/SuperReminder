@@ -11,15 +11,10 @@ const searchItem = (query) => {
     // Normalize query for consistency
     const normalizedQuery = query.trim().toLowerCase();
 
-    console.log("fetching data")
-
     // Fetch all items matching the query
     const allMatches = realm
         .objects("Item")
         .filtered("name CONTAINS[c] $0", normalizedQuery);
-
-
-    console.log("All matches length", allMatches.length)
 
     // Rank results based on relevance
     const exactMatches = [];
@@ -39,14 +34,11 @@ const searchItem = (query) => {
         }
     };
     const sortedExactMatches = exactMatches.slice(0, SEARCH_RESULTS_AMOUNT)
-    console.log("EXACT: ", sortedExactMatches)
         
     const sortedStartsWithMatches = startsWithMatches.slice(0, SEARCH_RESULTS_AMOUNT)
-    console.log("STARTS WITH: ", sortedStartsWithMatches)
     sortedStartsWithMatches.sort((a, b) => a.name.localeCompare(b.name));
 
     const sortedContainsMatches = containsMatches.slice(0, SEARCH_RESULTS_AMOUNT)
-    console.log("CONTAINS: ", sortedContainsMatches)
     sortedContainsMatches.sort((a, b) => a.name.localeCompare(b.name));
 
     // Sort results by relevance score and other criteria (e.g., alphabetical order for ties)

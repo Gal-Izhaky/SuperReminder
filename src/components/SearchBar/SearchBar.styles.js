@@ -3,25 +3,25 @@ import colors from "../../theme/colors";
 import globalstyles from "../../theme/globalstyles";
 
 const ITEM_HEIGHT = 40;
-const MAX_ITEMS_IN_LIST = 4;
+const MAX_ITEMS_IN_LIST = 3;
 
 const styles = StyleSheet.create({
     container: {
+        width: "100%",
         backgroundColor: colors.background,
         marginTop: 0,
         height: "auto",
-        padding: 16,
+        paddingHorizontal: 16,
     },
     searchInput: {
-        width: "95%",
+        width: "100%",
         padding:15,
         fontSize: 22,
 
         ...globalstyles.input
     },
     itemList: {
-        width: "95%",
-        marginHorizontal: "auto",
+        width: "100%",
         borderRadius: 10,
         borderWidth: 2,
         borderColor: colors.lightGray,
@@ -37,6 +37,11 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: "#eee",
     },
+    searchQuery: {
+        width: 100,
+        height: 50,
+        backgroundColor: "yellow",
+    }
 });
 
 export default styles;

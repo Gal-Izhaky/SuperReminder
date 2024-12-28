@@ -20,24 +20,6 @@ export const ShoppingListProvider = ({ children }) => {
 
     useEffect(fetchData, []);
 
-    // function to remove an item with key of itemKey from a list with key of listKey
-    const removeItem = (listKey, itemKey) => {
-        const updateTime = Date.now()
-
-        const updatedLists = lists.map((list) => {
-            if(list.key !== listKey) return list
-
-            const updatedItems = list.items.filter(item => item.key !== itemKey)
-            return { ...list, items: updatedItems, updateTime:  updateTime}; // Update the key here
-        })
-        
-        // Update local state
-        setLists(updatedLists)
-
-        // Update the database
-        ListData.removeShopItem(listKey, itemKey, updateTime)
-    }
-
     // function to edit the name of a list with key of listKey
     const editName = (listKey, listName) => {
         const updateTime = Date.now()
@@ -83,6 +65,53 @@ export const ShoppingListProvider = ({ children }) => {
         // Update the database
         ListData.removeShoppingList(listKey)
     };
+
+    // function to add item to a shopping list
+    const addItem = (listKey, itemKey, amount) => {
+        const updateTime = Date.now()
+
+        const updatedLists = lists.map((list) => {
+            if(list.key !== listKey) return list
+
+            const existingItemIndex = list.items.findIndex(item => item.key === itemKey);
+            const updatedItems = [...list.items];
+
+            if (existingItemIndex >= 0) {
+                updatedItems[existingItemIndex] = {
+                    ...updatedItems[existingItemIndex],
+                    amount: updatedItems[existingItemIndex].amount + amount
+                };
+            } else {
+                updatedItems.push({ key: itemKey, amount: amount });
+            }
+
+            return { ...list, items: updatedItems, updateTime:  updateTime};
+        })
+        
+        // Update local state
+        setLists(updatedLists)
+
+        // Update the database
+        ListData.addShopItem(listKey, itemKey, amount, updateTime)
+    }
+
+    // function to remove an item with key of itemKey from a list with key of listKey
+    const removeItem = (listKey, itemKey) => {
+        const updateTime = Date.now()
+
+        const updatedLists = lists.map((list) => {
+            if(list.key !== listKey) return list
+
+            const updatedItems = list.items.filter(item => item.key !== itemKey)
+            return { ...list, items: updatedItems, updateTime:  updateTime};
+        })
+        
+        // Update local state
+        setLists(updatedLists)
+
+        // Update the database
+        ListData.removeShopItem(listKey, itemKey, updateTime)
+    }
 
     return (
         <ShoppingListContext.Provider value={{ lists, addList, removeList, editName, removeItem }}>

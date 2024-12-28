@@ -63,7 +63,7 @@ const removeShoppingList = (listKey) => {
 };
 
 // function to add an item to a list, with key as the key
-const addShopItem = (key, newItem, updateTime) => {
+const addShopItem = (key, itemKey, amount, updateTime) => {
     try {
         realm.write(() => {
             // Find the shopping list by its key value
@@ -74,11 +74,20 @@ const addShopItem = (key, newItem, updateTime) => {
                 return
             }                
             
-            // Create a new Item object with amount as 1
-            const item = {...newItem, amount: 1};
+            // Check if the item already exists in the list
+            const existingItemIndex = shoppingList.items.findIndex(item => item.key === itemKey);
+
+            // Create the new item object
+
+            if (existingItemIndex >= 0) {
+                // If item exists, update its amount
+                shoppingList.items[existingItemIndex].amount += amount;
+            }else{
+                const newItem = { key: itemKey, amount: amount };
+                shoppingList.items.push(newItem);
+            }
 
             // Add the new item to the items list of the shopping list
-            shoppingList.items.push(item);
             shoppingList.updateTime = updateTime;
         });
     } catch (error) {
