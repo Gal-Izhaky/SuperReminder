@@ -37,7 +37,6 @@ The application integrates powerful tools and technologies, enabling users to cr
 
 ## 🚧 Upcoming Features
 ### 1. Enhanced Shopping Lists
-* Add items to shopping lists from the fetched data.
 * Compare prices for the entire shopping list across supermarkets.
 ### 2. Localization and Personalization
 * Multi-language support tailored to user location and preferences.
