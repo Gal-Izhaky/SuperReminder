@@ -10,6 +10,7 @@ The application integrates powerful tools and technologies, enabling users to cr
 * Create new shopping lists stored locally using Realm Database.
 * Edit and delete lists as needed.
 * Sort and filter lists for better organization.
+* Search and add new items to lists.
 ### 2. Barcode Scanning
 * Scan product barcodes to view all of its' info and compare prices across multiple supermarkets.
 ### 3. Supermarket Data Browsing
@@ -37,7 +38,6 @@ The application integrates powerful tools and technologies, enabling users to cr
 
 ## 🚧 Upcoming Features
 ### 1. Enhanced Shopping Lists
-* Add items to shopping lists from the fetched data.
 * Compare prices for the entire shopping list across supermarkets.
 ### 2. Localization and Personalization
 * Multi-language support tailored to user location and preferences.
