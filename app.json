@@ -14,7 +14,15 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSCameraUsageDescription": "צריך לקבל גישה למצלמה שלך בשביל לסרוק ברקוד."
+        "NSCameraUsageDescription": "אנו זקוקים להרשאת גישה למצלמה שלך כדי לסרוק את הברקוד של המוצר",
+        "NSLocationWhenInUseUsageDescription": "אנו זקוקים להרשאת גישה למיקום שלך כדי לספק תזכורות חכמות",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "אנו זקוקים להרשאת גישה למיקום שלך כדי לספק תזכורות חכמות בכל עת",
+        "NSLocationAlwaysUsageDescription": "אנו זקוקים להרשאת גישה למיקום שלך כדי לספק תזכורות חכמות בכל עת",
+        "NSMotionUsageDescription": "אנו זקוקים להרשאת גישה לחיישני התנועה שלך כדי לספק שירותים מבוססי תנועה",
+        "NSUserNotificationUsageDescription": "אנו זקוקים להרשאה כדי לשלוח לך התראות תזכורת"
+      },
+      "entitlements": {
+        "aps-environment": "production"
       }
     },
     "android": {
@@ -22,14 +30,29 @@
         "foregroundImage": "./src/assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["CAMERA"],
+      "permissions": ["CAMERA", "ACCESS_BACKGROUND_LOCATION", "ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "POST_NOTIFICATIONS"],
       "package": "com.android.SuperReminder"
     },
     "web": {
       "favicon": "./src/assets/icons/favicon.png"
     },
     "plugins": [
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "react-native-radar",
+        {
+            "iosFraud": true,
+            "iosNSLocationWhenInUseUsageDescription": "אנו זקוקים להרשאת גישה למיקום שלך כדי לספק תזכורות חכמות",
+            "iosNSLocationAlwaysAndWhenInUseUsageDescription": "אנו זקוקים להרשאת גישה למיקום שלך כדי לספק תזכורות חכמות בכל עת",
+            "iosBackgroundMode": true,
+            "iosNSMotionUsageDescription": "אנו זקוקים להרשאת גישה לחיישני התנועה שלך כדי לספק שירותים מבוססי תנועה",
+
+            "androidFraud": true,
+            "androidBackgroundPermission": true,
+            "androidFineLocationPermission": true,
+            "addRadarSDKMotion": true
+        }
+        ]
     ]
   }
 }

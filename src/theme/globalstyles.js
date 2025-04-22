@@ -1,4 +1,8 @@
+// React imports
 import { StyleSheet } from "react-native";
+
+// Theme imports
+import constants from "./constants";
 import colors from "./colors";
 
 const globalstyles = StyleSheet.create({
@@ -7,64 +11,80 @@ const globalstyles = StyleSheet.create({
         shadowColor: colors.shadow,
         shadowOffset: {
             width: 0,
-            height: 4,
+            height: constants.spacing.small,
         },
         shadowOpacity: 0.3,
-        shadowRadius: 4,
-        elevation: 4,
+        shadowRadius: constants.spacing.small,
+        elevation: constants.spacing.small,
     },
-    card : {
-        width: '90%',
-
-        marginHorizontal:"5%",
-        marginVertical: 10,
-
+    // Shadow variants
+    smallShadow: {
+        shadowColor: colors.shadow,
+        shadowOffset: {
+            width: 0,
+            height: constants.spacing.tiny,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: constants.spacing.tiny,
+        elevation: constants.spacing.tiny,
+    },
+    mediumShadow: {
+        shadowColor: colors.shadow,
+        shadowOffset: {
+            width: 0,
+            height: constants.spacing.smaller,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: constants.spacing.smaller,
+        elevation: constants.spacing.smaller,
+    },
+    card: {
+        width: constants.layout.size.relative.almostFull,
+        marginHorizontal: constants.spacing.relative.mediumSmall,
+        marginVertical: constants.spacing.mediumSmall,
         backgroundColor: colors.background,
-
-        paddingRight:10,
-
-        display: "flex",
-        flexDirection: "row-reverse",
-        justifyContent: "space-between",
-
-        borderWidth:2,
-        borderColor: colors.lightGray,
+        paddingRight: constants.spacing.mediumSmall,
+        display: constants.layout.display.flex,
+        flexDirection: constants.layout.flex.direction.rowReverse,
+        justifyContent: constants.layout.align.spaceBetween,
+        borderWidth: constants.layout.border.medium,
+        borderColor: colors.input.border,
     },
     deleteIcon: {
-        width: 35,
-        height: 35,
+        width: constants.layout.size.absolute.xSmall,
+        height: constants.layout.size.absolute.xSmall,
         resizeMode: 'stretch',
-        marginLeft: 7,
+        marginLeft: constants.spacing.smaller,
     },
     textRight: {
-        textAlign: "right"
+        textAlign: constants.layout.align.right
     },
     flexRow: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
+        display: constants.layout.display.flex,
+        flexDirection: constants.layout.flex.direction.row,
+        alignItems: constants.layout.align.center,
     },
     charIndicator: {
-        position: "absolute",
-        bottom:0,
-        left: 5,
-        textAlign: "left",
-        fontSize: 16,
+        position: constants.layout.position.absolute,
+        bottom: 0,
+        left: constants.spacing.small,
+        textAlign: constants.layout.align.left,
+        fontSize: constants.typography.size.medium,
     },
     input: {
-        marginHorizontal: "auto",
-        textAlign: "right",
-        borderRadius: 10,
-        borderWidth:2,
-        borderColor: colors.lightGray,
+        marginHorizontal: constants.spacing.auto,
+        textAlign: constants.layout.align.right,
+        borderRadius: constants.layout.radius.medium,
+        borderWidth: constants.layout.border.medium,
+        borderColor: colors.input.border,
     },
     semiTransparentBG: {
-        backgroundColor: colors.grayBG
+        backgroundColor: colors.modal.overlay
     },
-    // reusable values
-    contentWidth: "90%",
-    boldText: "600",
-    semiBoldText: "500",
+    // reusable values - these should be replaced by direct imports where used
+    contentWidth: constants.layout.size.relative.almostFull,
+    boldText: constants.typography.weight.bold,
+    semiBoldText: constants.typography.weight.semiBold,
 })
 
-export default globalstyles
+export default globalstyles;

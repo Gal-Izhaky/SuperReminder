@@ -1,64 +1,40 @@
-// External imports
-import { useState, useEffect } from "react";
+// Initialize firebase
+import "./src/core/storage/firebase/Config";
+
+// Initialize translator
+import "./src/i18n/i18next";
 
 // Internal imports
-import { manageData, shouldDownloadData } from "./src/firebase/DataManager";
+import { useDataFetching } from "./src/core/hooks/useDataFetching";
+import { useNotificationNavigation } from "./src/core/hooks/useNotificationNavigation";
+import useGeofencing from "./src/features/location/useGeofencing";
 
 // Components
-import Spinner from "./src/components/Spinner/Spinner";
-import MainContent from "./src/components/MainContent/MainContent";
-
-// Constants
-const CHECK_INTERVAL = 60 * 60 * 1000; // 1 hour in milliseconds
+import Spinner from "./src/ui/components/feedback/spinner/Spinner";
+import DrawerNavigator from "./src/core/navigation/DrawerNavigator";
 
 /**
  * App Component
- * Root component that manages data fetching and displays main content
+ * Root component of the application that manages data fetching and navigation
+ * 
+ * Features:
+ * - Periodic data synchronization
+ * - Deep linking from notifications
+ * - Geofencing functionality
+ * - Loading state management
+ * 
+ * @returns {JSX.Element} The root application component
  */
 const App = () => {
+    // Initialize geofencing with permissions
+    useGeofencing();
+    useNotificationNavigation();
+
     // State management
-    const [fetchingData, setFetchingData] = useState(false);
-    
-    // Data fetching effect
-    useEffect(() => {
-        if (!fetchingData) return;
+    const { fetchingData } = useDataFetching();
 
-        const fetchData = async () => {
-            try {
-                await manageData();
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            } finally {
-                setFetchingData(false);
-            }
-        };
-        fetchData();
-    }, [fetchingData]);
-
-    // Periodic update effect
-    useEffect(() => {
-        const startFetching = async () => {
-            if (fetchingData || !await shouldDownloadData()) {
-                console.log("Data is up-to-date. No download needed.");
-                return;
-            }
-            setFetchingData(true);
-        };
-
-        // Initial fetch on app load
-        startFetching();
-        
-        // Set up periodic checks
-        const interval = setInterval(startFetching, CHECK_INTERVAL);
-        return () => clearInterval(interval);
-    }, []);
-
-    // Render
-    return (
-        <>
-            {fetchingData ? <Spinner /> : <MainContent />}
-        </>
-    );
+    return fetchingData ? <Spinner /> : <DrawerNavigator />
+ 
 };
 
 export default App;
