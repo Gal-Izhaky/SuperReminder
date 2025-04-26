@@ -23,14 +23,17 @@ const ScannerCamera = ({ hasPermissions, scanned, onBarcodeDetected }) => {
     }
     
     return (
-        <RNCamera
-            style={styles.camera}
-            onGoogleVisionBarcodesDetected={
-                scanned ? undefined : onBarcodeDetected
-            }
-            type={RNCamera.Constants.Type.back}
-            captureAudio={false}
-        />
+        <>
+            <RNCamera
+                style={styles.camera}
+                onGoogleVisionBarcodesDetected={
+                    scanned ? undefined : onBarcodeDetected
+                }
+                type={RNCamera.Constants.Type.back}
+                captureAudio={false}
+            />
+            <Text style={styles.instructionText}>{t('scanner.scanInstructions')}</Text>
+        </>
     );
 };
 
