@@ -98,8 +98,16 @@ const PriceTableModal = ({ visible, onClose, list, singleItemDetails=false }) =>
         onClose();
     }, [onClose]);
 
-    if(!list.items.length){
-        return null;
+    useEffect(() => {
+        if (visible && list.items.length === 0) {
+            handleClose();
+            setInternalVisible(false);
+            animateOut();
+        }
+    }, [visible, list.items, handleClose]);
+
+    if (!list || !list.items || list.items.length === 0) {
+        return null; // Don't render if no items
     }
 
     return (

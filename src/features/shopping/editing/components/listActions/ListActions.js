@@ -1,5 +1,5 @@
 // External imports
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 // Component imports
@@ -38,6 +38,16 @@ const ListActions = ({ list, addItem, getItemAmount }) => {
         setAddDialogVisible(false);
     }, []);
 
+    const handlePriceModalClose = useCallback(() => {
+        setPriceModalVisible(false);
+    }, []);
+
+    useEffect(() => {
+        if (list.items.length === 0) {
+            setPriceModalVisible(false);
+        }
+    }, [list.items]);
+
     return (
         <>
             {/* Compare prices button */}
@@ -71,7 +81,7 @@ const ListActions = ({ list, addItem, getItemAmount }) => {
             {/* Price comparison modal */}
             <PriceTableModal
                 visible={priceModalVisible}
-                onClose={() => setPriceModalVisible(false)}
+                onClose={handlePriceModalClose}
                 list={list}
             />
         </>
